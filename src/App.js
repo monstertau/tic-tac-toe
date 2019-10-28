@@ -31,7 +31,7 @@ class App extends React.Component {
   };
 
   clicked = event => {
-    console.log(this.state);
+    // console.log(this.state);
 
     const dataSquare = event.target.dataset.square;
     if (this.board[dataSquare] === "" && !this.state.gameEnded) {
@@ -43,7 +43,7 @@ class App extends React.Component {
   };
 
   checkWinner = () => {
-    console.log(this.board);
+    // console.log(this.board);
     const result = this.game.isEnd(this.board);
     if (result == "X" || result == "O") {
       this.setState({
@@ -57,15 +57,20 @@ class App extends React.Component {
       });
     }
     if (this.state.turn == "X") {
-      let [m, pos1] = this.game.min(this.board);
-      console.log("x value: " + m + " pos: " + pos1);
+      let t0 = performance.now();
+      let [m, pos1] = this.game.min(this.board,-2,2);
+      let t1 = performance.now();
+      console.log("Evaluation Time: " + (t1 - t0) + " Milisecond");
+      console.log("Recommended Move: " + pos1);
     } else if (this.state.turn == "O") {
-      let [m, pos2] = this.game.max(this.board);
+      let [m, pos2] = this.game.max(this.board,-2,2);
       this.setState({
         turn: "X"
       });
-      this.board[pos2] = "O";
-      console.log("o value: " + m + " pos: " + pos2);
+      if (this.board[pos2] == "") {
+        this.board[pos2] = "O";
+      }
+      // console.log("o value: " + m + " pos: " + pos2);
     }
   };
 

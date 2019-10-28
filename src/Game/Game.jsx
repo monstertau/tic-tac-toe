@@ -1,6 +1,6 @@
 import React from "react";
 class Game extends React.Component {
-  max = board => {
+  max = (board, alpha, beta) => {
     let maxv = -2;
     let pos;
     let result = this.isEnd(board);
@@ -19,14 +19,15 @@ class Game extends React.Component {
         if (m > maxv) {
           maxv = m;
           pos = i;
-          
         }
         board[i] = "";
+        if (maxv >= beta) return [maxv, pos];
+        if (maxv > alpha) alpha = maxv;
       }
     }
     return [maxv, pos];
   };
-  min = board => {
+  min = (board, alpha, beta) => {
     let minv = 2;
     let pos;
     const result = this.isEnd(board);
@@ -46,6 +47,8 @@ class Game extends React.Component {
           pos = i;
         }
         board[i] = "";
+        if (minv <= alpha) return [minv, pos];
+        if (minv < beta) alpha = minv;
       }
     }
     return [minv, pos];
